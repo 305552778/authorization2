@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xi.authorization.dao.SysMenuMapper">
+    <resultMap id="BaseMenuMap" type="com.xi.authorization.model.SysMenu" >
+        <id column="menu_id" property="menu_id" jdbcType="INTEGER" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parent_id" jdbcType="INTEGER" />
+        <result column="sortNO" property="sortNO" javaType="INTEGER"/>
+        <result column="menu_name" property="menu_name" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="MenuAndPopedomResultMap" type="com.xi.authorization.model.SysMenu" extends="BaseMenuMap">
+        <!--collection:定义子对象集合映射-->
+        <!--association:完成子对象的映射-->
+        <!--property:子对象在父对象中的属性名-->
+        <!--javaType:子对象的java类型-->
+        <!--autoMapping:完成子对象的自动映射，若开启驼峰，则按驼峰匹配-->
+         <collection property="popedoms" javaType="List" ofType="com.xi.authorization.model.SysPopedom" autoMapping="true">
+             <id column="popdeom_id" property="popdeom_id"></id>
+         </collection>
+    </resultMap>
+    <select id="getAllMenu" resultMap="MenuAndPopedomResultMap">
+         SELECT * FROM Sys_menu a left join sys_popedom b on a.menu_id=b.menu_id
+    </select>
+    <select id="getMenuByMenuName" parameterType="java.lang.String" resultType="com.xi.authorization.model.SysMenu">
+         SELECT * FROM Sys_menu WHERE menu_name = #{name}
+    </select>
+    <insert id="insertMenu" parameterType="com.xi.authorization.model.SysMenu" useGeneratedKeys="true">
+         insert into sys_menu(menu_name,sortno,parent_id,url) values(#{menu_name},#{sortNO},#{parent_id},#{url})
+    </insert>
+</mapper>

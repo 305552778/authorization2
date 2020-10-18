@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xi.authorization.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xi.authorization.entity.SysUser">
+        <id column="id" property="id" />
+        <result column="idnumber" property="idnumber" />
+        <result column="gender" property="gender" />
+        <result column="icon" property="icon" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="pwd" property="pwd" />
+        <result column="user_name" property="userName" />
+        <result column="organization_id" property="organizationId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, idnumber, gender, icon, name, phone, pwd, user_name, organization_id
+    </sql>
+    <select id="GetPagedVOUser" resultType="com.xi.authorization.vo.VO_SysUserRoleOrganization">
+        select * from SYS_USER as u
+        left join sys_roles_and_users as x on u.id=x.user_id
+        left join sys_role as  r on r.role_id=x.role_id
+        inner join sys_organization as o on o.id=r.organization_id
+    </select>
+
+</mapper>
